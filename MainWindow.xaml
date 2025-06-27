@@ -1,0 +1,200 @@
+﻿<Window x:Class="CybersecurityChatbotGUI1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CybersecurityChatbotGUI1"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="Cybersecurity Awareness Assistant" 
+        Height="650" Width="900"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <!-- Styles -->
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#FF007ACC"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="10 5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+        <!-- Style for Delete Button -->
+        <Style x:Key="DeleteButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="#FFE81123"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="5 2"/>
+            <Setter Property="Width" Value="60"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <TabControl x:Name="tabControl">
+            <!-- Chat Tab -->
+            <TabItem Header="Chat">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Header -->
+                    <Border Grid.Row="0" Background="#FF007ACC" Padding="10">
+                        <TextBlock Text="Cybersecurity Awareness Assistant" 
+                                   Foreground="White" FontSize="18" FontWeight="Bold"/>
+                    </Border>
+
+                    <!-- Chat History -->
+                    <ListBox x:Name="ChatBox" Grid.Row="1" 
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" TextWrapping="Wrap" Margin="5"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <!-- Input Area -->
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="5">
+                        <TextBox x:Name="UserInput" Width="700" 
+                                 VerticalAlignment="Center" KeyDown="UserInput_KeyDown"
+                                 materialDesign:HintAssist.Hint="Type commands like 'Add task to update passwords'..."/>
+                        <Button x:Name="SendButton" Content="Send" Width="100" 
+                                Click="SendButton_Click"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <!-- Task Assistant Tab -->
+            <TabItem Header="Task Assistant">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Task Input Form -->
+                    <GroupBox Header="Add New Task" Margin="5">
+                        <StackPanel>
+                            <TextBox x:Name="TaskTitleBox" Margin="5" 
+                                     materialDesign:HintAssist.Hint="Task title"/>
+
+                            <TextBox x:Name="TaskDescriptionBox" Margin="5"
+                                     materialDesign:HintAssist.Hint="Description" 
+                                     AcceptsReturn="True" Height="60" TextWrapping="Wrap"/>
+
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox x:Name="ReminderCheckBox" Content="Set Reminder" 
+                                          Margin="5" VerticalAlignment="Center"/>
+                                <DatePicker x:Name="ReminderDatePicker" Margin="5" Width="150"
+                                            IsEnabled="{Binding IsChecked, ElementName=ReminderCheckBox}"/>
+                            </StackPanel>
+
+                            <Button x:Name="AddTaskButton" Content="Add Task" 
+                                    Click="AddTaskButton_Click"/>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <!-- Task List -->
+                    <GroupBox Grid.Row="1" Header="Your Tasks" Margin="5">
+                        <ListView x:Name="TasksListView">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Completed" Width="80">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{Binding IsCompleted, Mode=TwoWay}"
+                                                          HorizontalAlignment="Center"
+                                                          Click="TaskCheckBox_Click"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Task" DisplayMemberBinding="{Binding Title}" Width="200"/>
+                                    <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" Width="250"/>
+                                    <GridViewColumn Header="Due Date" 
+                                                   DisplayMemberBinding="{Binding DueDate, StringFormat='MM/dd/yyyy'}" 
+                                                   Width="120"/>
+                                    <GridViewColumn Header="Actions" Width="100">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Content="Delete" 
+                                                        Style="{StaticResource DeleteButtonStyle}"
+                                                        Click="DeleteTaskButton_Click"
+                                                        Tag="{Binding}"
+                                                        Margin="2"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+            <!-- Quiz Tab -->
+            <TabItem Header="Quiz">
+                <StackPanel Margin="10">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="Cybersecurity Quiz" FontSize="18" FontWeight="Bold"/>
+                        <TextBlock x:Name="QuizProgressText" Margin="10,0" FontStyle="Italic"/>
+                    </StackPanel>
+
+                    <!-- Updated Question Display with ScrollViewer (STEP 4) -->
+                    <Border Background="#FFF0F0F0" Padding="10" Margin="0,10">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="150">
+                            <TextBlock x:Name="QuizQuestion" FontSize="14" TextWrapping="Wrap"/>
+                        </ScrollViewer>
+                    </Border>
+
+                    <StackPanel x:Name="QuizOptionsPanel" Margin="10,5">
+                        <!-- Options will be added dynamically -->
+                    </StackPanel>
+
+                    <!-- Keep your existing NextQuestionButton, just ensure it's properly named -->
+                    <Button x:Name="NextQuestionButton" Content="Next Question" 
+        HorizontalAlignment="Right" Margin="0,10" 
+        Click="NextQuestionButton_Click"/>
+                </StackPanel>
+            </TabItem>
+
+            <!-- Activity Log Tab -->
+            <TabItem Header="Activity Log">
+                <DockPanel>
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="5">
+                        <Button Content="Export Log" Click="ExportLog_Click" Margin="0,0,10,0"/>
+                        <Button Content="Clear Log" Click="ClearLog_Click"/>
+                    </StackPanel>
+
+                    <ListView x:Name="ActivityLogListView">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Time" Width="80" 
+                                               DisplayMemberBinding="{Binding Timestamp, StringFormat='{}{0:HH:mm:ss}'}"/>
+                                <GridViewColumn Header="Action" Width="120" 
+                                               DisplayMemberBinding="{Binding Action}"/>
+                                <GridViewColumn Header="Details" Width="300" 
+                                               DisplayMemberBinding="{Binding Details}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </DockPanel>
+            </TabItem>
+        </TabControl>
+
+        <!-- Status Bar -->
+        <StatusBar VerticalAlignment="Bottom">
+            <StatusBarItem>
+                <TextBlock x:Name="StatusText"/>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>
