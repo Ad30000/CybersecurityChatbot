@@ -570,7 +570,11 @@ namespace CybersecurityChatbotGUI1
 // Part 3
 
 /*
-* Author: DeepSeek Chat  
-* Version: [Model Version, e.g., "DeepSeek-V3"]  
-* URL: [Paste the conversation URL if available]  
-* Accessed on: [Date when you retrieved the information, e.g., 20 May 2025]*/
+ * Author: IAmTimCorey   
+ * Title: C# user interface 
+ * Type: YouTube Playlist  
+ * Platform: YouTube  
+ * URL:https://www.youtube.com/results?search_query=gui+crash+course+c%23 
+ * Published on:  3 Jun 2019  
+ * Number of Videos: 22 videos  
+ */
