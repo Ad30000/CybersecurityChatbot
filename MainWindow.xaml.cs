@@ -93,6 +93,7 @@ namespace CybersecurityChatbotGUI1
                 ChatBox.Items.Add($"Bot: Welcome back, {_userMemory.UserName}!");
         }
 
+        // This method logs an activity in the activity log
         private void LogActivity(string action, string details)
         {
             _activityLogs.Add(new ActivityLog(action, details));
@@ -115,6 +116,7 @@ namespace CybersecurityChatbotGUI1
             }
         }
 
+        // This method clears the activity log
         private void ClearLog_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Clear all activity logs?", "Confirm",
@@ -125,6 +127,7 @@ namespace CybersecurityChatbotGUI1
             }
         }
 
+        // This method handles the user input from the chat box
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
             string userInput = UserInput.Text;
@@ -138,6 +141,7 @@ namespace CybersecurityChatbotGUI1
             ChatBox.ScrollIntoView(ChatBox.Items[ChatBox.Items.Count - 1]);
         }
 
+        // This method processes the user input and generates a response
         private void ProcessUserInput(string input)
         {
             if (_awaitingTaskDescription)
@@ -158,6 +162,7 @@ namespace CybersecurityChatbotGUI1
             ChatBox.Items.Add($"Bot: {response}");
         }
 
+        // This method generates a response based on user input, checking for NLP commands and sentiment first
         private string GetBotResponse(string userInput)
         {
             var (nlpResponse, command) = _responseManager.ProcessNlpInput(userInput);
@@ -193,6 +198,7 @@ namespace CybersecurityChatbotGUI1
         #endregion
 
         #region Task Management
+        // This method adds a new task based on user input
         private void AddTaskButton_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(TaskTitleBox.Text))
@@ -222,12 +228,14 @@ namespace CybersecurityChatbotGUI1
             RefreshTaskList();
         }
 
+        // This method handles the Enter key for task input
         private void RefreshTaskList()
         {
             TasksListView.Items.Refresh();
             LogActivity("Task", $"Task list refreshed - {_taskManager.Tasks.Count} tasks");
         }
 
+        // This method handles the Enter key for task input
         private void ClearTaskInputs()
         {
             TaskTitleBox.Clear();
@@ -235,6 +243,7 @@ namespace CybersecurityChatbotGUI1
             ReminderCheckBox.IsChecked = false;
         }
 
+        // This method handles the Enter key for task input
         private void InitializeReminderTimer()
         {
             _reminderTimer = new DispatcherTimer
@@ -245,6 +254,7 @@ namespace CybersecurityChatbotGUI1
             _reminderTimer.Start();
         }
 
+        // This method checks for tasks that are due and shows reminders
         private void CheckReminders(object sender, EventArgs e)
         {
             var now = DateTime.Now;
@@ -262,6 +272,7 @@ namespace CybersecurityChatbotGUI1
             }
         }
 
+        // This method shows a reminder notification for a task
         private void ShowReminderNotification(TaskManager.SecurityTask task)
         {
             MessageBox.Show($"REMINDER: {task.Title}\n\n{task.Description}",
@@ -273,6 +284,7 @@ namespace CybersecurityChatbotGUI1
         #endregion
 
         #region Quiz System
+        // This method initializes the quiz system
         private void InitializeQuiz()
         {
             _quizManager.ResetQuiz();
@@ -281,6 +293,7 @@ namespace CybersecurityChatbotGUI1
             LogActivity("Quiz", "New quiz session started");
         }
 
+        //  This method loads the next question in the quiz
         private void LoadNextQuestion()
         {
             if (_quizManager.MoveToNextQuestion())
@@ -294,6 +307,7 @@ namespace CybersecurityChatbotGUI1
             }
         }
 
+        // This method resets the quiz button colors    
         private void ResetQuizButtonColors()
         {
             if (QuizOptionsPanel == null) return;
@@ -306,6 +320,7 @@ namespace CybersecurityChatbotGUI1
             }
         }
 
+        // This method displays the current question in the quiz
         private void DisplayCurrentQuestion()
         {
             ResetQuizButtonColors();
@@ -329,6 +344,7 @@ namespace CybersecurityChatbotGUI1
             NextQuestionButton.Content = _quizManager.IsLastQuestion ? "Finish Quiz" : "Next Question";
         }
 
+        // This method handles the answer button click event
         private void AnswerButton_Click(object sender, RoutedEventArgs e)
         {
             var selectedButton = (Button)sender;
@@ -366,11 +382,13 @@ namespace CybersecurityChatbotGUI1
             LogActivity("Quiz", $"Answered Q{_quizManager.CurrentQuestionIndex + 1}: {(isCorrect ? "Correct" : "Incorrect")}");
         }
 
+        // This method updates the quiz progress text   
         private void UpdateQuizProgress()
         {
             QuizProgressText.Text = _quizManager.GetProgressText();
         }
 
+        // This method ends the quiz and displays the final score
         private void EndQuiz()
         {
             QuizQuestion.Text = $"Quiz Complete!\nFinal Score: {_quizManager.Score}/{_quizManager.GetTotalQuestions()}";
@@ -380,6 +398,8 @@ namespace CybersecurityChatbotGUI1
             LogActivity("Quiz", $"Quiz completed with score: {_quizManager.Score}/{_quizManager.GetTotalQuestions()}");
         }
 
+
+        // This method handles the Next Question button click event
         private void NextQuestionButton_Click(object sender, RoutedEventArgs e)
         {
             if (_waitingForContinue)
@@ -399,6 +419,7 @@ namespace CybersecurityChatbotGUI1
         }
         #endregion
 
+        // This method handles the Enter key for user input
         private void NextQuestion_Click(object sender, RoutedEventArgs e)
         {
             if (_quizManager.MoveToNextQuestion())
@@ -411,6 +432,7 @@ namespace CybersecurityChatbotGUI1
             }
         }
 
+        // This method ends the quiz session and displays the final score
         private void EndQuizSession()
         {
             QuizQuestion.Text = $"Quiz Complete!\nFinal Score: {_quizManager.Score}/{_quizManager.GetTotalQuestions()}";
@@ -418,18 +440,20 @@ namespace CybersecurityChatbotGUI1
             LogActivity("Quiz", $"Completed with score: {_quizManager.Score}/{_quizManager.GetTotalQuestions()}");
             _quizManager.ResetQuiz();
         }
-        
+
 
         #region Activity Log
 
         #endregion
 
         #region Helper Methods
+        // This method handles the Enter key for user input 
         private void UserInput_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter) SendButton_Click(sender, e);
         }
 
+        // This method handles the Enter key for task input
         private void DeleteTaskButton_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button button && button.Tag is SecurityTask task)
@@ -445,6 +469,7 @@ namespace CybersecurityChatbotGUI1
             }
         }
 
+        // This method handles the Enter key for task input 
         private void TaskCheckBox_Click(object sender, RoutedEventArgs e)
         {
             if (sender is CheckBox { DataContext: TaskManager.SecurityTask task })
@@ -456,6 +481,7 @@ namespace CybersecurityChatbotGUI1
             }
         }
 
+        // This method handles the Enter key for task input
         private void HandleCommand(string command, string userInput)
         {
             var parts = command.Split(' ');
@@ -477,6 +503,7 @@ namespace CybersecurityChatbotGUI1
             }
         }
         #endregion
+        // This method completes the task creation process
         private void CompleteTaskCreation(string description)
         {
             _taskManager.AddTask(_pendingTaskTitle, description, null);
