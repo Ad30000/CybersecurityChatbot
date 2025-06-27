@@ -24,7 +24,8 @@ namespace CybersecurityChatbotGUI1
 
             // New added keywords
             {"social engineering", "Social engineering attacks:\n⚠️ Never share credentials over phone\n⚠️ Verify caller identities\n⚠️ Beware of 'urgent' requests"},
-            {"wifi", "Public WiFi safety:\n🔒 Use VPN services\n🔒 Avoid accessing sensitive accounts\n🔒 Verify network names with staff"}
+            {"wifi", "Public WiFi safety:\n🔒 Use VPN services\n🔒 Avoid accessing sensitive accounts\n🔒 Verify network names with staff"},
+            {"ransomware", "Ransomware protection:\n🛡️ Maintain offline backups\n🛡️ Keep systems patched\n🛡️ Never open suspicious attachments\n🛡️ Use antivirus with behavior monitoring"},
         };
 
         // NLP-style pattern matching
